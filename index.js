@@ -31,10 +31,10 @@ app.use(
 
 
 
-// const supabase = createClient(
-//   process.env.SUPABASE_URL,
-//   process.env.SUPABASE_KEY
-// );
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
 const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,6 +50,18 @@ app.use(passport.session());
 app.get("/", async(req,res)=>{
     return res.render("home.ejs");
 })
+
+app.get("/dashboard", async (req, res) => {
+  try {
+    const { data, error } = await supabase.from("internships").select("*");
+    if (error) {
+      return res.render("student/dashboard.ejs", { internships: [] });
+    }
+    return res.render("student/dashboard.ejs", { internships: data || [] });
+  } catch (err) {
+    return res.render("student/dashboard.ejs", { internships: [] });
+  }
+});
 
 app.listen(3000,async()=>{
     console.log("Running on Port 3000!");
