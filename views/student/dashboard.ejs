@@ -9,86 +9,161 @@
   <body>
     <%- include('../partials/header.ejs') %>
     <div class="container">
-      <% if (internships && internships.length > 0) { %>
-      <div class="accordion" id="accordionExample">
-      <% internships.forEach(function(internship, idx) { %>
+      <h4>Active Internship Openings</h4>
+      <hr />
+      <% if (internships && internships.length > 0) { %> <%
+      internships.forEach(function(internship) { %>
+      <table class="table">
+        <tr>
+          <td colspan="5">
+            <b><%= internship.company %> </b>
+          </td>
+          <td colspan="2">
+            <b>Deadline: <%=internship.last_date%></b>
+          </td>
+        </tr>
 
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="heading<%= idx %>">
-            <button
-                class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapse<%= idx %>"
-                aria-expanded="false"
-              aria-controls="collapse<%= idx %>"
+        <tr>
+          <td>
+            <span class="badge text-bg-warning"
+              >Eligible Branches : <%=internship.branches%></span
             >
-              <%= internship.company %> &nbsp;
-              <span class="badge bg-warning text-dark"
-                ><%= internship.branches %></span
-              >
-              &nbsp;<span class="badge bg-warning text-dark"
-                >Class X: <%= internship["10th_cutoff"] %></span
-              >
-              &nbsp;<span class="badge bg-warning text-dark"
-                >Class XII: <%= internship["12th_cutoff"] %></span
-              >
-              &nbsp;<span class="badge bg-warning text-dark"
-                >Minimum CGPA: <%= internship.cgpa_cutoff %></span
-              >
-              &nbsp;<span class="badge bg-warning text-dark"
-                >Standing Arrears Allowed? : <%= internship.arrear %></span
-              >
-              &nbsp;<span class="badge bg-warning text-dark"
-                >Academic Gap Allowed? : <%= internship.academic_gap %></span
-              >
-            </button>
-          </h2>
-          <div
-            id="collapse<%= idx %>"
-            class="accordion-collapse collapse"
-            aria-labelledby="heading<%= idx %>"
-            data-bs-parent="#accordionExample"
-          >
-              <div class="accordion-body">
-              <table class="table">
-                <tr>
-                  <td colspan="3"><b>JOB DESCRIPTION</b></td>
-                </tr>
-                <tr>
-                  <td colspan="3"><%= internship.jd %></td>
-                </tr>
-                <tr>
-                  <td><b>Date of Pre-Placement Talk</b></td>
-                  <td><b>Date of Online Assesment</b></td>
-                  <td><b>Date of Interview</b></td>
-                </tr>
-                <tr>
-                  <td><%= internship.ppt_date %></td>
-                  <td><%= internship.oa_date %></td>
-                  <td><%= internship.interview_date %></td>
-                </tr>
-                <tr>
-                    <td><a class="btn btn-warning" href="<%= internship.company_website %>">Company Website</a></td>
-                    <td><a class="btn btn-warning" href="<%= internship.company_registration_link %>">Company Registration Link</a></td>
-                    <td><a class="btn btn-warning" href="/registration/<%= internship.id %>">Apply Now</a></td>
+          </td>
+          <td>
+            <span class="badge text-bg-warning"
+              >Class X : <%=internship["10th_cutoff"]%>%</span
+            >
+          </td>
+          <td>
+            <span class="badge text-bg-warning"
+              >Class XII : <%=internship["12th_cutoff"]%>%</span
+            >
+          </td>
+          <td>
+            <span class="badge text-bg-warning"
+              >Minimum CGPA : <%=internship.cgpa_cutoff %>/10</span
+            >
+          </td>
+          <% if(internship.arrear === "YES"){ %> &nbsp;
+          <td>
+            <span class="badge text-bg-success">Standing Arrears Allowed</span>
+          </td>
+          <% } else if(internship.arrear === "NO") { %> &nbsp;
+          <td><span class="badge text-bg-danger">No Standing Arrears</span></td>
 
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: center;">Last Date to Apply on Company Registration Link / VIT SIAP is <b><%= internship.last_date %></b> by <b><%= internship.last_time %></b></td>
-                </tr>
-              </table>
-            </div>
-          </div>
-        </div>
-        <hr>
+          <% } %> <% if(internship.academic_gap === "YES"){ %> &nbsp;
+          <td>
+            <span class="badge text-bg-success">Academic Gap Allowed</span>
+          </td>
+          <% } else if(internship.academic_gap === "NO") { %> &nbsp;
+          <td>
+            <span class="badge text-bg-danger">Academic Gap Not Allowed</span>
+          </td>
 
-      <% }) %>
-      </div>
-      <% } else { %>
-      <p>No internships available at the moment.</p>
+          <% } %>
+
+          <td rowspan="2">
+            <a class="btn btn-warning" href="/internship/<%=internship.id%>"
+              >Apply&nbsp;<i class="bi bi-box-arrow-in-right"></i
+            ></a>
+          </td>
+        </tr>
+      </table>
+
+      <% }) %> <% } else { %>
+      <p><b>There are no internship openings at the moment!</b></p>
       <% } %>
-      <%- include('../partials/footer.ejs') %>
+      <h4>My Internship Applications</h4>
+      <hr />
+
+      <% if (applications && applications.length > 0) { %>
+      <table class="table">
+        <tr>
+          <td rowspan="2"><b>Company</b></td>
+          <td colspan="4"><b>Selection Status</b></td>
+        </tr>
+        <tr>
+          <td><b>Pre-Placement Talk</b></td>
+          <td><b>Online Assesment</b></td>
+          <td><b>Interview</b></td>
+          <td><b>Hired</b></td>
+        </tr>
+        <% applications.forEach(function(application) { %>
+        <tr>
+          <td>Demo Text</td>
+          <% if (application.ppt_status=="Review in Progress"){ %>
+          <td>
+            <span class="badge rounded-pill bg-secondary"
+              >Review in Progress</span
+            >
+          </td>
+          <% } else if(application.ppt_status=="Selected") { %>
+          <td><span class="badge rounded-pill bg-success">Selected</span></td>
+
+          <% } else if(application.ppt_status=="Not Selected") { %>
+          <td>
+            <span class="badge rounded-pill bg-danger">Not Selected</span>
+          </td>
+
+          <% } %>
+
+          <% if (application.oa_status=="Review in Progress"){ %>
+          <td>
+            <span class="badge rounded-pill bg-secondary"
+              >Review in Progress</span
+            >
+          </td>
+          <% } else if(application.oa_status=="Selected") { %>
+          <td><span class="badge rounded-pill bg-success">Selected</span></td>
+
+          <% } else if(application.oa_status=="Not Selected") { %>
+          <td>
+            <span class="badge rounded-pill bg-danger">Not Selected</span>
+          </td>
+
+          <% } %>
+
+          <% if (application.interview_status=="Review in Progress"){ %>
+          <td>
+            <span class="badge rounded-pill bg-secondary"
+              >Review in Progress</span
+            >
+          </td>
+          <% } else if(application.interview_status=="Selected") { %>
+          <td><span class="badge rounded-pill bg-success">Selected</span></td>
+
+          <% } else if(application.interview_status=="Not Selected") { %>
+          <td>
+            <span class="badge rounded-pill bg-danger">Not Selected</span>
+          </td>
+
+          <% } %>
+
+          <% if (application.selection_status=="Review in Progress"){ %>
+          <td>
+            <span class="badge rounded-pill bg-secondary"
+              >Review in Progress</span
+            >
+          </td>
+          <% } else if(application.selection_status=="Selected") { %>
+          <td><span class="badge rounded-pill bg-success">Selected</span></td>
+
+          <% } else if(application.selection_status=="Not Selected") { %>
+          <td>
+            <span class="badge rounded-pill bg-danger">Not Selected</span>
+          </td>
+
+          <% } %>
+
+
+
+
+        </tr>
+      </table>
+
+      <% }) %> <% } else { %>
+      <p><b>You have not applied to any internships yet!</b></p>
+      <% } %> <%- include('../partials/footer.ejs') %>
     </div>
   </body>
 </html>

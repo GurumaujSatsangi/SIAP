@@ -53,13 +53,50 @@ app.get("/", async(req,res)=>{
 
 app.get("/dashboard", async (req, res) => {
   try {
-    const { data, error } = await supabase.from("internships").select("*");
-    if (error) {
-      return res.render("student/dashboard.ejs", { internships: [] });
+
+    const [internshipsResult, applicationsResult] = await Promise.all([
+      supabase.from("internships").select("*"),
+      supabase.from("applications").select("*")
+    ]);
+
+    const { data: internships, error: internshipsError } = internshipsResult;
+    const { data: applications, error: applicationsError } = applicationsResult;
+
+    if (internshipsError || applicationsError) {
+      console.error("Supabase error:", internshipsError || applicationsError);
+      return res.render("student/dashboard.ejs", {
+        internships: [],
+        applications: []
+      });
     }
-    return res.render("student/dashboard.ejs", { internships: data || [] });
+
+    return res.render("student/dashboard.ejs", {
+      internships: internships || [],
+      applications: applications || []
+    });
+
   } catch (err) {
-    return res.render("student/dashboard.ejs", { internships: [] });
+
+    console.error("Unexpected dashboard route error:", err);
+    return res.render("student/dashboard.ejs", {
+      internships: [],
+      applications: []
+    });
+  }
+
+
+});
+
+
+app.get("/internship/:id", async (req, res) => {
+  try {
+    const { data, error } = await supabase.from("internships").select("*").eq("id",req.params.id).single();
+    if (error) {
+      return res.render("student/internship.ejs", { internship: [] });
+    }
+    return res.render("student/internship.ejs", { internship: data || [] });
+  } catch (err) {
+    return res.render("student/internship.ejs", { internship  : [] });
   }
 });
 
