@@ -9,7 +9,8 @@
   <body>
     <%- include('../partials/header.ejs') %>
     <div class="container">
-          <div class="card">
+  <h5>Welcome, <%= user ? user.name : 'Guest' %> (<%= user ? user.vit_email : '' %>)!</h5>
+        <hr>  <div class="card">
               <div class="card-header">
                 <i class="bi bi-megaphone-fill"></i>&nbsp;<b>Announcements</b>
               </div>

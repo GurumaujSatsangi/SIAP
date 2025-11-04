@@ -38,10 +38,15 @@ app.set("views", path.join(__dirname, "views"));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", async(req,res)=>{
-  const{data,error}=await supabase.from("announcements").select("*");
-    return res.render("home.ejs",{announcements:data});
-})
+app.get("/", async (req, res) => {
+  // If the user is authenticated and is a student, send them to the dashboard.
+  if (req.isAuthenticated() && req.user && req.user.role === "student") {
+    return res.redirect("/dashboard");
+  }
+
+  const { data, error } = await supabase.from("announcements").select("*");
+  return res.render("home.ejs", { announcements: data });
+});
 
 app.get("/profile",async(req,res)=>{
   const message = req.query.message;
@@ -49,6 +54,10 @@ app.get("/profile",async(req,res)=>{
 })
 
 app.get("/dashboard", async (req, res) => {
+  // Require authentication for the dashboard. If not authenticated, start login.
+  if (!req.isAuthenticated()) {
+    return res.redirect("/auth/login/student");
+  }
   try {
 
     const [internshipsResult, applicationsResult, announcementsResult] = await Promise.all([
@@ -65,6 +74,7 @@ app.get("/dashboard", async (req, res) => {
         internships: [],
         applications: [],
         announcements:[],
+        user: req.user || null,
       });
     }
 
@@ -72,35 +82,33 @@ app.get("/dashboard", async (req, res) => {
       internships: internships || [],
       applications: applications || [],
       announcements: announcements||[],
+      user:req.user,
     });
 
   } catch (err) {
 
     return res.render("student/dashboard.ejs", {
       internships: [],
-      applications: []
+      applications: [],
+      user: req.user || null,
     });
   }
 
 
 });
 
-app.post("/update-profile",async(req,res)=>{
+app.post("/update-profile", async (req, res) => {
+  const { resume, cgpa, residence_type, hostel_block } = req.body;
 
-  const {resume,cgpa,residence_type} = req.body;
-
-  const {data,error}=await supabase.from("students").update({
-    cgpa:cgpa,
+  const { data, error } = await supabase.from("students").update({
+    cgpa: cgpa,
     residence_type,
-    hostel_block:hostel_block,
-    resume_link:resume,
+    hostel_block: hostel_block,
+    resume_link: resume,
   });
 
   return res.redirect("/profile?message=Profile Updated Succesfully!");
-
-  
-
-})
+});
 
 
 app.get("/internship/:id", async (req, res) => {
@@ -118,3 +126,82 @@ app.get("/internship/:id", async (req, res) => {
 app.listen(3000,async()=>{
     console.log("Running on Port 3000!");
 })
+
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    
+      callbackURL: "http://localhost:3000/auth/login/student/callback",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        const result = await supabase
+          .from("students")
+          .select("*")
+          .eq("uid", profile.id)
+          .single();
+        let user;
+        if (!result.data) {
+          const { error } = await supabase.from("students").insert([
+            {
+              uid: profile.id,
+              name: profile.displayName,
+              vit_email: profile.emails[0].value,
+            },
+          ]);
+          if (error) {
+            console.error("Error inserting user:", error);
+            return cb(error);
+          }
+          const { data: newUser, error: fetchError } = await supabase
+            .from("students")
+            .select("*")
+            .eq("uid", profile.id)
+            .single();
+          if (fetchError) {
+            console.error("Fetch after insert failed:", fetchError);
+            return cb(fetchError);
+          }
+          user = newUser;
+        } else {
+          user = result.data;
+        }
+        user.role = "student";
+        return cb(null, user);
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
+
+
+app.get(
+  "/auth/login/student/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/",
+    successRedirect: "/dashboard",
+  })
+);
+
+
+
+app.get(
+  "/auth/login/student",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+passport.serializeUser((user, cb) => {
+  cb(null, { ...user, role: user.role });
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
