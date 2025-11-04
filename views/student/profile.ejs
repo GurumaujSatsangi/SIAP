@@ -1,115 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>VIT SIAP</title>
-</head>
-<body>
+  </head>
+  <body>
     <%-include('../partials/header') %>
 
+    <% if(message) { %>
+    <script>
+        Swal.fire({
+  title: "Alert",
+  text: "<%= message %>",
+  icon: "info"
+});
+    </script>    
+    <% } %>
+
     <div class="container">
-           <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">My Profile</li>
-  </ol>
-</nav><hr>
- <div class="card">
+      <nav
+        style="
+          --bs-breadcrumb-divider: url(&#34;data:image/svg + xml,%3Csvgxmlns='http://www.w3.org/2000/svg'width='8'height='8'%3E%3Cpathd='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z'fill='currentColor'/%3E%3C/svg%3E&#34;
+          );
+        "
+        aria-label="breadcrumb"
+      >
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+        </ol>
+      </nav>
+      <hr />
+      <div class="card">
         <div class="card-header">
-          <i class="bi bi-person-square"></i>&nbsp; <i>(Contact CDC Office to update the below details)</i>
+          <i class="bi bi-person-square"></i>&nbsp;
+          <i>(Contact CDC Office to update the below details)</i>
         </div>
         <div class="card-body">
-            <table class="table">
-                <tr>
-                    <td>Gurumauj Satsangi</td>
-                    <td colspan="2">23BCE0474</td>
-                </tr>
-                <tr>
-                    <td>gurumaujsatsangi@gmail.com</td>
-                    <td>gurumauj.satsangi2023@vitstudent.ac.in</td>
-                    <td colspan="2">9875691340</td>
-                </tr>
-                <tr>
-                    <td>B.TECH - COMPUTER SCIENCE & ENGINEERING</td>
-                    <td colspan="2">2023-2027</td>
-                </tr>
-                <tr>
-                    <td>Class X: 91</td>
-                    <td>Class XII: 76</td>
-                 <td>No Academic Gap</td>             
-
-                </tr>
-                <tr>
-                    <td>CGPA: 8.24</td>
-                <td colspan="2">No Standing Arrears</td>  
-         </tr>
-            </table>
+          <table class="table">
+            <tr>
+              <td>Gurumauj Satsangi</td>
+              <td colspan="2">23BCE0474</td>
+            </tr>
+            <tr>
+              <td>gurumaujsatsangi@gmail.com</td>
+              <td>gurumauj.satsangi2023@vitstudent.ac.in</td>
+              <td colspan="2">9875691340</td>
+            </tr>
+            <tr>
+              <td>B.TECH - COMPUTER SCIENCE & ENGINEERING</td>
+              <td colspan="2">2023-2027</td>
+            </tr>
+            <tr>
+              <td>Class X: 91</td>
+              <td>Class XII: 76</td>
+              <td>No Academic Gap</td>
+            </tr>
+            <tr>
+              <td>CGPA: 8.24</td>
+              <td colspan="2">No Standing Arrears</td>
+            </tr>
+          </table>
         </div>
       </div>
-      <hr>
+      <hr />
       <form action="/update-profile" method="POST">
-  <div class="mb-3">
-    <label for="resume" class="form-label">Google Drive Link to Resume</label>
-    <input type="url" class="form-control" id="resume" name="resume" aria-describedby="emailHelp">
-    <div id="resumehelp" class="form-text">Enable 'Anyone with Link' in Share settings.</div>
-  </div>
-  <div class="mb-3">
-    <label for="cgpa" class="form-label">CGPA</label>
-    <input type="text" name="cgpa" class="form-control" id="exampleInputPassword1">
-  </div>
-<br>
+        <div class="mb-3">
+          <label for="resume" class="form-label"
+            >Google Drive Link to Resume</label
+          >
+          <input
+            type="url"
+            class="form-control"
+            id="resume"
+            name="resume"
+            aria-describedby="emailHelp"
+          />
+          <div id="resumehelp" class="form-text">
+            Enable 'Anyone with Link' in Share settings.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="cgpa" class="form-label">CGPA</label>
+          <input
+            type="text"
+            name="cgpa"
+            class="form-control"
+            id="cgpa"
+          />
+        </div>
+        <br />
 
-  <div class="form-check">
-  <input class="form-check-input" type="radio" name="residence_type" id="residence_typedayscholar">
-  <label class="form-check-label" for="residence_type_dayscholar">
-    I AM A DAYSCHOLAR
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="residence_type" id="residence_type_hosteller">
-  <label class="form-check-label" for="residence_type_hosteller">
-    I AM A HOSTELLER
-  </label>
-</div>
-<br>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="residence_type"
+            id="residence_type_dayscholar"
+          />
+          <label class="form-check-label" for="residence_type_dayscholar">
+            I AM A DAYSCHOLAR
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="residence_type"
+            id="residence_type_hosteller"
+          />
+          <label class="form-check-label" for="residence_type_hosteller">
+            I AM A HOSTELLER
+          </label>
+        </div>
+        <br />
 
+        <div class="mb-3">
+          <label for="hostelblock" class="form-label">Hostel Block</label>
+          <select id="hostelblock" name="hostelblock" class="form-select">
+            <option>MH-A</option>
+            <option>MH-B</option>
+            <option>MH-C</option>
+            <option>MH-D</option>
+            <option>MH-E</option>
+            <option>MH-F</option>
+            <option>MH-G</option>
+            <option>MH-H</option>
+            <option>MH-I</option>
+            <option>MH-J</option>
+            <option>MH-K</option>
+            <option>MH-L</option>
+            <option>MH-M</option>
+            <option>MH-N</option>
+            <option>MH-P</option>
+            <option>MH-Q</option>
+            <option>MH-R</option>
+            <option>MH-S</option>
+            <option>MH-T</option>
+          </select>
+        </div>
 
-
-    <div class="mb-3">
-    <label for="hostelblock" class="form-label">Hostel Block</label>
-    <select id="hostelblock" name="hostelblock" class="form-select">
-        <option>MH-A</option>
-        <option>MH-B</option>
-        <option>MH-C</option>
-        <option>MH-D</option>
-        <option>MH-E</option>
-        <option>MH-F</option>
-        <option>MH-G</option>
-        <option>MH-H</option>
-        <option>MH-I</option>
-        <option>MH-J</option>
-        <option>MH-K</option>
-        <option>MH-L</option>
-        <option>MH-M</option>
-        <option>MH-N</option>
-        <option>MH-P</option>
-        <option>MH-Q</option>
-        <option>MH-R</option>
-        <option>MH-S</option>
-        <option>MH-T</option>
-
-      </select>
-  </div>
-  
-  <input type="submit" value="Update Profile" class="btn btn-warning">
-</form>
-
-
-
+        <input type="submit" value="Update Profile" class="btn btn-warning" />
+      </form>
     </div>
     <%-include('../partials/footer') %>
-    
-</body>
+    <script src="/script.js"></script>
+
+  </body>
 </html>

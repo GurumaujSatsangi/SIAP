@@ -10,16 +10,9 @@ import path from "path";
 import { name } from "ejs";
 
 const app = express();
-
-
-
-
-
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-
 
 app.use(
   session({
@@ -29,20 +22,18 @@ app.use(
   })
 );
 
-
-
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
 
 const port = process.env.PORT || 3000;
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use("/static", express.static(path.join(__dirname, "public")));
-
 app.set("views", path.join(__dirname, "views"));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,7 +44,8 @@ app.get("/", async(req,res)=>{
 })
 
 app.get("/profile",async(req,res)=>{
-  return res.render("student/profile.ejs");
+  const message = req.query.message;
+  return res.render("student/profile.ejs",{message: message || null});
 })
 
 app.get("/dashboard", async (req, res) => {
@@ -69,7 +61,6 @@ app.get("/dashboard", async (req, res) => {
     const { data: applications, error: applicationsError } = applicationsResult;
     const {data:announcements, error:announcementsError} = announcementsResult;
     if (internshipsError || applicationsError || announcementsError) {
-      console.error("Supabase error:", internshipsError || applicationsError || announcementsError);
       return res.render("student/dashboard.ejs", {
         internships: [],
         applications: [],
@@ -85,7 +76,6 @@ app.get("/dashboard", async (req, res) => {
 
   } catch (err) {
 
-    console.error("Unexpected dashboard route error:", err);
     return res.render("student/dashboard.ejs", {
       internships: [],
       applications: []
@@ -94,6 +84,23 @@ app.get("/dashboard", async (req, res) => {
 
 
 });
+
+app.post("/update-profile",async(req,res)=>{
+
+  const {resume,cgpa,residence_type} = req.body;
+
+  const {data,error}=await supabase.from("students").update({
+    cgpa:cgpa,
+    residence_type,
+    hostel_block:hostel_block,
+    resume_link:resume,
+  });
+
+  return res.redirect("/profile?message=Profile Updated Succesfully!");
+
+  
+
+})
 
 
 app.get("/internship/:id", async (req, res) => {
