@@ -51,6 +51,10 @@ app.get("/", async(req,res)=>{
     return res.render("home.ejs");
 })
 
+app.get("/profile",async(req,res)=>{
+  return res.render("student/profile.ejs");
+})
+
 app.get("/dashboard", async (req, res) => {
   try {
 

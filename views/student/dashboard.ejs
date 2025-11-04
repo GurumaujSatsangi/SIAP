@@ -86,7 +86,7 @@
           <td><b>Pre-Placement Talk</b></td>
           <td><b>Online Assesment</b></td>
           <td><b>Interview</b></td>
-          <td><b>Hired</b></td>
+          <td><b>Summer Internship</b></td>
         </tr>
         <% applications.forEach(function(application) { %>
         <tr>
@@ -163,7 +163,9 @@
 
       <% }) %> <% } else { %>
       <p><b>You have not applied to any internships yet!</b></p>
-      <% } %> <%- include('../partials/footer.ejs') %>
+      <% } %>
     </div>
+           <%- include('../partials/footer.ejs') %>
+
   </body>
 </html>
