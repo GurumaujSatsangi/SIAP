@@ -48,7 +48,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", async(req,res)=>{
-    return res.render("home.ejs");
+  const{data,error}=await supabase.from("announcements").select("*");
+    return res.render("home.ejs",{announcements:data});
 })
 
 app.get("/profile",async(req,res)=>{
@@ -58,25 +59,28 @@ app.get("/profile",async(req,res)=>{
 app.get("/dashboard", async (req, res) => {
   try {
 
-    const [internshipsResult, applicationsResult] = await Promise.all([
+    const [internshipsResult, applicationsResult, announcementsResult] = await Promise.all([
       supabase.from("internships").select("*"),
-      supabase.from("applications").select("*")
+      supabase.from("applications").select("*"),
+      supabase.from("announcements").select("*"),
     ]);
 
     const { data: internships, error: internshipsError } = internshipsResult;
     const { data: applications, error: applicationsError } = applicationsResult;
-
-    if (internshipsError || applicationsError) {
-      console.error("Supabase error:", internshipsError || applicationsError);
+    const {data:announcements, error:announcementsError} = announcementsResult;
+    if (internshipsError || applicationsError || announcementsError) {
+      console.error("Supabase error:", internshipsError || applicationsError || announcementsError);
       return res.render("student/dashboard.ejs", {
         internships: [],
-        applications: []
+        applications: [],
+        announcements:[],
       });
     }
 
     return res.render("student/dashboard.ejs", {
       internships: internships || [],
-      applications: applications || []
+      applications: applications || [],
+      announcements: announcements||[],
     });
 
   } catch (err) {

@@ -9,6 +9,23 @@
   <body>
     <%- include('../partials/header.ejs') %>
     <div class="container">
+          <div class="card">
+              <div class="card-header">
+                <i class="bi bi-megaphone-fill"></i>&nbsp;<b>Announcements</b>
+              </div>
+              <div class="card-body">
+                <%if (announcements && announcements.length>0){ %> <%
+                announcements.forEach(function(announcements) { %>
+                <ul>
+                  <li><b><%=announcements.title%>&nbsp;<a target="_blank" href="<%=announcements.link%>">(Click Here)</a></b></li>
+                  <br><p align="justify"><%=announcements.description %></p>
+                </ul>
+                <% }) %> <% } else{ %>
+                <b>No Announcements to show!</b>
+                <% } %>
+              </div>
+            </div>
+            <hr>
       <h4>Active Internship Openings</h4>
       <hr />
       <% if (internships && internships.length > 0) { %> <%
