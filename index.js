@@ -48,9 +48,43 @@ app.get("/", async (req, res) => {
   return res.render("home.ejs", { announcements: data });
 });
 
+app.post("/create-profile",async(req,res)=>{
+
+  const {fullname,vitemail,personal_email,contact_number,programme,branch,gender, arrears,class_x,class_xii,cgpa,resume,certifications,academic_gap,residence_type,hostelblock} = req.body;
+
+  const {data,error} = await supabase.from("students").update({
+    name:fullname,
+    registration_number:registration_number,
+    programme:programme,
+    branch:branch,
+    gender:gender,
+    personal_email:personal_email,
+    vit_email:vitemail,
+    contact_number:contact_number,
+    X:class_x,
+    XII:class_xii,
+    cgpa:cgpa,
+    academic_gap:academic_gap,
+    arrears:arrears,
+    residence_type:residence_type,
+    hostel_block:hostelblock,
+    resume_link:resume,
+    certifications:certifications,
+
+  }).eq("uid",req.user.id);
+
+  return res.redirect("/dashboard?message=Profile Updated Succesfully!");
+
+});
+
 app.get("/profile",async(req,res)=>{
   const message = req.query.message;
   return res.render("student/profile.ejs",{message: message || null});
+})
+
+app.get("/create-profile",async(req,res)=>{
+  const message = req.query.message;
+  return res.render("student/create-profile.ejs",{message: message || null});
 })
 
 app.get("/dashboard", async (req, res) => {

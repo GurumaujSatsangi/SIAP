@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT SIAP</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%-include('../partials/header') %>
+    <div class="container">
+      <h4>Create Profile</h4>
+      <p align="justify">
+        <b
+          >The below mentioned fields cannot be edited once you have submitted
+          the form, hence you are advised to enter correct details only.
+          <ul>
+            <li>Name</li>
+            <li>Registration Number</li>
+            <li>VIT Email ID</li>
+            <li>Personal Email ID</li>
+            <li>Contact Number</li>
+            <li>Class X & XII Percentage</li>
+            <li>Academic Gap History</li>
+          </ul>
+        </b>
+      </p>
+      <hr />
+
+      <form action="/update-profile" method="POST">
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullname"
+            name="fullname"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="fullname" class="form-label">VIT Email ID</label>
+          <input
+            type="email"
+            class="form-control"
+            id="vitemail"
+            name="vitemail"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Personal Email ID</label>
+          <input
+            type="email"
+            class="form-control"
+            id="personal_email"
+            name="personal_email"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Contact Number</label>
+          <input
+            type="text"
+            class="form-control"
+            id="contact_number"
+            name="contact_number"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Class X Percentage</label>
+          <input
+            type="text"
+            class="form-control"
+            id="class_x"
+            name="class_x"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Class XII Percentage</label>
+          <input
+            type="text"
+            class="form-control"
+            id="class_xii"
+            name="class_xii"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="cgpa" class="form-label">CGPA</label>
+          <input type="text" name="cgpa" class="form-control" id="cgpa" />
+        </div>
+        <br />
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="academic_gap"
+            id="academic_gap_yes"
+          />
+          <label class="form-check-label" for="academic_gap_yes">
+            I HAVE ACADEMIC GAP HISTORY.
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="academic_gap"
+            id="academic_gap_no"
+          />
+          <label class="form-check-label" for="academic_gap_no">
+            I DO NOT HAVE ACADEMIC GAP HISTORY.
+          </label>
+        </div>
+
+        <Br />
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="residence_type"
+            id="residence_type_dayscholar"
+          />
+          <label class="form-check-label" for="residence_type_dayscholar">
+            I AM A DAYSCHOLAR
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="residence_type"
+            id="residence_type_hosteller"
+          />
+          <label class="form-check-label" for="residence_type_hosteller">
+            I AM A HOSTELLER
+          </label>
+        </div>
+
+        <br />
+
+        <div class="mb-3">
+          <label for="hostelblock" class="form-label">Hostel Block</label>
+          <select id="hostelblock" name="hostelblock" class="form-select">
+            <option>MH-A</option>
+            <option>MH-B</option>
+            <option>MH-C</option>
+            <option>MH-D</option>
+            <option>MH-E</option>
+            <option>MH-F</option>
+            <option>MH-G</option>
+            <option>MH-H</option>
+            <option>MH-I</option>
+            <option>MH-J</option>
+            <option>MH-K</option>
+            <option>MH-L</option>
+            <option>MH-M</option>
+            <option>MH-N</option>
+            <option>MH-P</option>
+            <option>MH-Q</option>
+            <option>MH-R</option>
+            <option>MH-S</option>
+            <option>MH-T</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="resume" class="form-label"
+            >Google Drive Link to Resume</label
+          >
+          <input
+            type="url"
+            class="form-control"
+            id="resume"
+            name="resume"
+            aria-describedby="emailHelp"
+          />
+          <div id="resumehelp" class="form-text">
+            Enable 'Anyone with Link' in Share settings.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="certifications" class="form-label"
+            >Google Drive Link to Certifications Folder</label
+          >
+          <input
+            type="url"
+            class="form-control"
+            id="certifications"
+            name="certifications"
+            aria-describedby="emailHelp"
+          />
+          <div id="resumehelp" class="form-text">
+            Upload all your certifications in a Google Drive Folder with the
+            name as your REGISTRATION NUMBER, enable 'Anyone with Link' in the
+            Share settings.
+          </div>
+        </div>
+
+        <input type="submit" value="Update Profile" class="btn btn-warning" />
+      </form>
+    </div>
+    <%-include('../partials/footer') %>
+  </body>
+  <script src="/script.js"></script>
+</html>
